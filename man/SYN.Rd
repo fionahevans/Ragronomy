@@ -5,14 +5,53 @@
 \title{SYN}
 \usage{
 SYN(currentCrop, currentPotentialYield, currentCropBasePrice, soil,
-  soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried, fertiliserData,
-  cropData)
+  soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried)
 }
 \arguments{
-\item{paddockHistory}{data frame containing paddock history.}
+\item{currentCrop}{element of c( "ASW", "Premium White wheat", "Hard wheat", "Durum Premium", "Durum General",}
+
+\item{currentPotentialYield}{numeric (t/ha)}
+
+\item{currentCropBasePrice}{numrix ($)}
+
+\item{soil}{an element of soils, use function getSoilsSYN()}
+
+\item{soilOrganicCarbon}{percentage (between 0 and 100)}
+
+\item{weeklyRain}{weeklyRain is a rainfall profile, use getRainfallProfilesSYN}
+
+\item{fertilisersAdded}{based on fertilisers returned by getFertiliserDataSYN, see examples for format}
+
+\item{RONcarried}{numeric, can be calculated from paddock history.}
 }
 \description{
 Run the SYN model.
+}
+\examples{
+currentCrop <- "ASW"
+
+currentPotentialYield <- 2
+
+currentCropBasePrice <- 202
+
+soils <- getSoilsSYN()
+soil <- soils[1,]
+
+soilOrganicCarbon <- 0.5
+
+getRainfallProfilesSYN()
+weeklyRain <- getWeeklyRainSYN(5)
+
+fertilisersAdded <- data.frame(name=c("DAP", "Urea", "nitrate"), 
+                               weekApplied=c(0, 4, -14), 
+                               netRate=c(15, 30, 50))
+
+RONcarried <- calculateRON(paddockHistory)
+
+SYN(currentCrop, currentPotentialYield, currentCropBasePrice,
+    soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, 
+   RONcarried)
+
 }
 \author{
 Fiona Evans

@@ -105,26 +105,7 @@ var cropData = [
   {"name":"Canola (Oil)","type":"canola","index":5,"protein":40,"price":1},
   {"name":"Canola (Oil)","type":"canola","index":6,"protein":42,"price":1.03},
   {"name":"Canola (Oil)","type":"canola","index":7,"protein":46,"price":1.09},
-  {"name":"Canola (Oil)","type":"canola","index":8,"protein":50,"price":1.15},
-  {"name":"Copy of ASW","type":"wheat","index":1,"protein":6,"price":-32},
-  {"name":"Copy of ASW","type":"wheat","index":2,"protein":7,"price":-29},
-  {"name":"Copy of ASW","type":"wheat","index":3,"protein":8,"price":-14},
-  {"name":"Copy of ASW","type":"wheat","index":4,"protein":9,"price":0},
-  {"name":"Copy of ASW","type":"wheat","index":5,"protein":10,"price":9},
-  {"name":"Copy of ASW","type":"wheat","index":6,"protein":11.5,"price":15},
-  {"name":"Copy of ASW","type":"wheat","index":7,"protein":12,"price":15},
-  {"name":"Copy of ASW","type":"wheat","index":8,"protein":13,"price":15},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":1,"protein":7,"price":-40},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":2,"protein":8,"price":-29},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":3,"protein":9,"price":-14},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":4,"protein":10,"price":0},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":5,"protein":11.5,"price":10.5},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":6,"protein":12,"price":14.5},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":7,"protein":13,"price":20.5},
-  {"name":"Copy of Premium White wheat","type":"wheat","index":8,"protein":14,"price":20.5},
-  {"name":"Test Crop","type":"wheat","index":1,"protein":5,"price":10},
-  {"name":"Test Crop","type":"wheat","index":2,"protein":10,"price":20},
-  {"name":"Test Crop","type":"wheat","index":3,"protein":30,"price":50}
+  {"name":"Canola (Oil)","type":"canola","index":8,"protein":50,"price":1.15}
 ]; 
 
 
@@ -991,7 +972,7 @@ var rainfallProfiles = [
       var nitrogen = nitrogenSources.nitrogen;
       var Nsources = nitrogenSources.Nsources;
       
-      console.log(JSON.stringify(Nsources[4].NAvail));
+      //console.log(JSON.stringify(Nsources[4].NAvail));
       
 
       var kn = array(0, 2+fertilisersAdded.length);

@@ -17,7 +17,8 @@ getSoilsSYN <- function() {
   
   # Create session
   ct <- new_context()
-  ct$source("./inst/js/syn.js")
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   
   # Evaluate Javascript
@@ -69,7 +70,8 @@ getWeeklyRainSYN <- function(index) {
   
   # Create session
   ct <- new_context()
-  ct$source("./inst/js/syn.js")
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   ct$assign("index", index)
   
@@ -97,7 +99,8 @@ getFertiliserDataSYN <- function() {
   
   # Create session
   ct <- new_context()
-  ct$source("./inst/js/syn.js")
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   
   # Evaluate Javascript
@@ -127,7 +130,9 @@ addFertilisers <- function(fertilisersAdded) {
   
   # Create session
   ct <- new_context()
-  ct$source("./inst/js/syn.js")
+  
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   ct$assign("fertilisersAdded", fertilisersAdded)
   
@@ -161,7 +166,8 @@ calculateRON <- function(paddockHistory) {
   # Create session
   ct <- new_context()
   ct$source("http://momentjs.com/downloads/moment.js")
-  ct$source("./inst/js/syn.js")
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   ct$assign("paddockHistory", paddockHistory)
   
@@ -230,8 +236,8 @@ SYN <- function(currentCrop, currentPotentialYield, currentCropBasePrice,
   # Create session
   ct <- new_context()
   ct$source("http://momentjs.com/downloads/moment.js")
-  ct$source("./inst/js/math.min.js")
-  ct$source("./inst/js/syn.js")
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
   
   ct$assign("currentCrop", currentCrop)
   ct$assign("currentPotentialYield", currentPotentialYield)
@@ -268,9 +274,39 @@ SYN <- function(currentCrop, currentPotentialYield, currentCropBasePrice,
 }
 
 
-
-fertiliserRateSensitivityAnalysis <- function(){
+#' fertiliserRateSensitivityAnalysis
+#' 
+#' fertiliserRateSensitivityAnalysis.
+#' 
+#' @author Fiona Evans
+#' 
+#' @param fert xx
+#' 
+#' @export
+fertiliserRateSensitivityAnalysis <- function(fert, crop, pyield, price, soil, oc, weeklyRain, 
+                                              fertilisersAdded, ron){
   
+  sq <- seq(from=0, to=120, by=12)
+  
+  data <- data.frame(rate = rep(NA, length(sq)),
+                     actualYield = rep(NA, length(sq)),
+                     percentProtein = rep(NA, length(sq)),
+                     priceReceived = rep(NA, length(sq)),
+                     netReturn= rep(NA, length(sq)))
+  
+  j <- which(fertilisersAdded$name == fert)
+  
+  for (i in 1:length(sq)){
+    fertilisersAdded[j, "netRate"] = sq[i];
+    ret <- SYN(crop, pyield, price, soil, oc, weeklyRain, fertilisersAdded, ron)
+    
+    data[i, "rate"] <- sq[i]
+    data[i, "actualYield"] <- ret$actualYield
+    data[i, "percentProtein"] <- ret$percentProtein
+    data[i, "priceReceived"] <- ret$price
+    data[i, "netReturn"] <- ret$netReturn
+  }
+  data
 }
 
 weekAppliedSensitivityAnalysis <- function(){
