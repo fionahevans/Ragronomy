@@ -13,5 +13,6 @@ URL: http://www.r-project.org
 LazyData: TRUE
 Collate:
   'colors.R'
-  'npoptim.R'
+  'npdecide.R'
+  'syn.R'
 RoxygenNote: 6.0.1
