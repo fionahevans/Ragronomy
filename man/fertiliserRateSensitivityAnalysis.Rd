@@ -5,7 +5,7 @@
 \title{fertiliserRateSensitivityAnalysis}
 \usage{
 fertiliserRateSensitivityAnalysis(fert, crop, pyield, price, soil, oc,
-  weeklyRain, fertilisersAdded, ron)
+  weeklyRain, fertilisersAdded, ron, fertiliserData, CropData)
 }
 \arguments{
 \item{fert}{xx}

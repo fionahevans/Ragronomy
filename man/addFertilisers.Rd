@@ -4,7 +4,7 @@
 \alias{addFertilisers}
 \title{addFertilisers}
 \usage{
-addFertilisers(fertilisersAdded)
+addFertilisers(fertilisersAdded, fertiliserData)
 }
 \arguments{
 \item{paddockHistory}{data frame containing paddock history.}

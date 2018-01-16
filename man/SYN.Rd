@@ -5,7 +5,8 @@
 \title{SYN}
 \usage{
 SYN(currentCrop, currentPotentialYield, currentCropBasePrice, soil,
-  soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried)
+  soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried, fertiliserData,
+  cropData)
 }
 \arguments{
 \item{currentCrop}{element of c( "ASW", "Premium White wheat", "Hard wheat", "Durum Premium", "Durum General",}

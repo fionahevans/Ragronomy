@@ -7,12 +7,11 @@
  */
  
  
-// Use R function to replace Math.tanh, which doesn;t seem to be implemented in V8
-function tanh(x) {
-  var out = console.r.call('tanh', {x: x});
-  return(out);
-}
 
+function tanh (arg) {
+    // sinh(number)/cosh(number)
+    return (Math.exp(arg) - Math.exp(-arg)) / (Math.exp(arg) + Math.exp(-arg));
+}
 
 
 var soils = [ 
@@ -152,6 +151,7 @@ var rainfallProfiles = [
       { name: 'Summer rain - leaching', description: '', data: []  },
       { name: 'Summer rain - no leaching', description: '', data: [] }];
     
+    // Default rain - leaching
     var week = seq(-14, 15);
     var rain = [0, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
@@ -166,6 +166,7 @@ var rainfallProfiles = [
       }
     }
     
+    // Default rain - no leaching
     var rain = [0, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
                 10, 20, 15, 20, 5,
@@ -179,6 +180,7 @@ var rainfallProfiles = [
       }
     }
     
+    // Dryland rain - leaching
     var rain = [0, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
                 8, 8, 8, 75, 5,
@@ -192,7 +194,8 @@ var rainfallProfiles = [
       }
     }
     
-     var rain = [0, 0, 0, 0, 0, 0, 0, 0, 0,
+    // Dryland rain - no leaching
+    var rain = [0, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
                 8, 8, 8, 8, 5,
                 8, 8, 8, 0, 
@@ -204,7 +207,8 @@ var rainfallProfiles = [
         rain: rain[i]
       }
     }
-
+    
+    // Dryland summer rain - leaching
     var rain = [100, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 8, 8, 8, 75, 8, 8, 8, 8, 
                 0, 0, 0, 0, 0, 0, 0];       
@@ -216,6 +220,7 @@ var rainfallProfiles = [
       }
     }
     
+    // Dryland summer rain - no leaching
     var rain = [100, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 8, 8, 8, 8, 8, 8, 8, 8, 
                 0, 0, 0, 0, 0, 0, 0];       
@@ -227,7 +232,8 @@ var rainfallProfiles = [
       }
     }
     
-     var rain = [100, 0, 0, 0, 0, 0, 0, 0, 0,
+    // Summer rain - leaching
+    var rain = [100, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
                 10, 20, 75, 20, 5,
                 10, 10, 0, 10, 
@@ -240,6 +246,7 @@ var rainfallProfiles = [
       }
     }
     
+    // Summer rain - no leaching
     var rain = [100, 0, 0, 0, 0, 0, 0, 0, 0,
                 10, 0, 3, 3, 3, 3, 
                 10, 20, 15, 20, 5,
@@ -284,7 +291,7 @@ var rainfallProfiles = [
     /**
      * Add fertilisers N rate and netRate.
      */
-    function addFertilisers(fertilisersAdded) {
+    function addFertilisers(fertilisersAdded, fertiliserData) {
       var fertiliserNames = fertiliserData.map(function(a) {return a.name;});
       for (var i=0; i<fertilisersAdded.length; i++) {
         // matching fertiliserData row
@@ -405,8 +412,9 @@ var rainfallProfiles = [
           if (i == 0) { // half RON produced
             RON.RONproduced[i] = RON.RONproduced[i]/2;
 
-            // Ammonium produced Only produced by green manure. Ammonium and RON together make up total green manure nitrogen.
-            // Only seperated into RON and ammonium in the last year. Years prior to the previous all green manure
+            // Ammonium produced Only produced by green manure. 
+            // Ammonium and RON together make up total green manure nitrogen.
+            // Only separated into RON and ammonium in the last year. Years prior to the previous all green manure
             // nitrogen is assumed to go to RON.
             RON.ammoniumProduced[i] = RON.RONproduced[i]/2;
           }
@@ -442,7 +450,8 @@ var rainfallProfiles = [
 
           }
           else {
-            if (paddockHistory[i].till == true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.33 +RON. RONproduced[i];
+            if (paddockHistory[i].till == true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.33 +
+                  RON. RONproduced[i];
             else RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.5 + RON.RONproduced[i];
           }
         }
@@ -522,6 +531,14 @@ var rainfallProfiles = [
 
        return(ret);
     }
+    
+    function getCol(matrix, col){
+       var column = [];
+       for(var i=0; i<matrix.length; i++){
+          column.push(matrix[i][col]);
+       }
+       return column;
+    }
 
     function calculateNitrogenSources(till, soil, soilOrganicCarbon, weeklyRain,
         fertilisersAdded, totalRonCarried, fertiliserData){
@@ -533,10 +550,6 @@ var rainfallProfiles = [
 
 
       // Effective rainfall (mm) = weeks -14 to 15
-      //var effective = jQuery.grep(weeklyRain, function (el) {
-      //return el.week > -15 && el.week <= 16
-      //});
-      
       var effective = weeklyRain.filter(function (el) {
         return el.week > -15 && el.week <= 16
         });
@@ -596,7 +609,8 @@ var rainfallProfiles = [
         rootDepth.x[i] = rootDepth.unimpededRoots[i];
         if (rootDepth.unimpededRoots[i] > wetFrontDepth[i]) rootDepth.x[i] = wetFrontDepth[i];
         rootDepth.rootDepth[i] = rootDepth.x[i-1] + rootDepth.unimpededRoots[i] - rootDepth.unimpededRoots[i-1];
-        if (rootDepth.x[i-1] + rootDepth.unimpededRoots[i] - rootDepth.unimpededRoots[i-1]  > wetFrontDepth[i]) rootDepth.rootDepth[i] = wetFrontDepth[i];
+        if (rootDepth.x[i-1] + rootDepth.unimpededRoots[i] - 
+          rootDepth.unimpededRoots[i-1]  > wetFrontDepth[i]) rootDepth.rootDepth[i] = wetFrontDepth[i];
       }
 
       // Peak shift (cm per mm rainfall)
@@ -714,18 +728,20 @@ var rainfallProfiles = [
         }
       }
 
-      // diagonal & bottom triangle is empty thus remove values from above
+      // Diagonal & bottom triangle is empty thus remove values from above
       for (var i=1; i<=effectiveRain.length; i++) { // columns
         for (var j=1; j<effectiveRain.length; j++) { // rows = Age.week
           if (i <= j) fractionActiveLayer[i][j] = null;
         }
       }
-
+      
+      
+      
       // Nitrogen matrix
       var nitrogen = {
         name: ["Soil Organic Nitrogen", "Residue Organic Nitrogen"],
         weekAddedSensitivity: [null, null],
-        weekAdded: [-4, -4], // [-12, -12]
+        weekAdded: [-12, -12], // [-4, -4]
         organicNitrogen: [],
         ammoniumNitrogen: [],
         nitrateNitrogen: [0, 0],
@@ -736,18 +752,10 @@ var rainfallProfiles = [
       var sonronWeekAdded = SON_RON_week_added(weeklyRain);
 
       // Organic nitrogen
-      //console.log(soilOrganicCarbon/100.000000/0.04);
-      
-      // Math.tanh gives exactsame number oas Excel for tabnh, but is not available in Google v8 JS engine
-      // Can use r interface as in function below, but it rounds to 4 decimal places
-      // var th = Math.tanh(soilOrganicCarbon/100/0.04)
-      
       var adjustedOC =  0.04 * tanh(soilOrganicCarbon/100/0.04); 
       var MarvelMysteryNumber = 200000;
      
       nitrogen.organicNitrogen[0] = adjustedOC * MarvelMysteryNumber * (1 - soil.gravelContent);
-      //console.log('adjustedOC = ' + adjustedOC);
-      //console.log(nitrogen.organicNitrogen[0]);
       
       // Residue organic nitrogen
       nitrogen.organicNitrogen[1] = totalRonCarried;
@@ -781,9 +789,13 @@ var rainfallProfiles = [
         nitrogen.weekAdded.push(fertiliser.weekApplied);
         nitrogen.weekAddedSensitivity.push(fertiliser.weekApplied);
         // added rounding 14/12/17
+        //nitrogen.organicNitrogen.push(fertiliserData[indx].urea * fertiliser.rate); 
+        //nitrogen.ammoniumNitrogen.push(fertiliserData[indx].nh4n * fertiliser.rate);
+        //nitrogen.nitrateNitrogen.push(fertiliserData[indx].no3n * fertiliser.rate);
         nitrogen.organicNitrogen.push(Math.round(fertiliserData[indx].urea * fertiliser.rate)); 
         nitrogen.ammoniumNitrogen.push(Math.round(fertiliserData[indx].nh4n * fertiliser.rate));
         nitrogen.nitrateNitrogen.push(Math.round(fertiliserData[indx].no3n * fertiliser.rate));
+        
         nitrogen.ammonificationRate.push(fertiliserData[indx].ammonificationRate);
         nitrogen.nitrificationRate.push(fertiliserData[indx].nitrificationRate);
       }
@@ -796,6 +808,17 @@ var rainfallProfiles = [
 
       var rateRelease = 0.2; // rate.release.nitrogen.by.microbes
       var rateCapture = 0.15;  // rate.capture.nitrate.by.microbes
+      
+      // Transpose fractionRootZone for use in calculating nitrogen sources later
+      var frz = [];
+      var tmp;
+      for (var i=0; i<effectiveRain.length-1; i++) {
+        frz[i] = getCol(fractionRootZone, i); 
+        frz[i].shift();
+      }
+      // console.log('fractionRootZone[0] = ' + fractionRootZone[0] + '\n');
+      //console.log('frz[15] = ' + frz[15] + '\n');
+
 
       for (var j=0; j<2+fertilisersAdded.length; j++){
         
@@ -820,9 +843,16 @@ var rainfallProfiles = [
         }
 
         newsource.BugDemand[0] = rateCapture;
+        
+        if (j==0) {
+          console.log(effectiveWeeks);
+          console.log(nitrogen.weekAdded);
+        }
 
         for (var i=0; i<effectiveRain.length-1; i++){
 
+          newsource.BugDemand[i] = rateCapture;
+          newsource.LeachDemand[i] = (1 - fractionActiveLayer[i+2][1]);
           if (i == 0) {
             newsource.fromNH4[i] = 0;
             newsource.BugN[i] = 0;
@@ -831,26 +861,18 @@ var rainfallProfiles = [
               newsource.LeachDemand[i] = (1 - fractionActiveLayer[i+2][1]) /
                 (rateCapture + 1 - fractionActiveLayer[i+2][1]);
             }
-            else {
-              newsource.BugDemand[i] = rateCapture;
-              newsource.LeachDemand[i] = (1 - fractionActiveLayer[i+2][1]);
-            }
-            if (effectiveWeeks[i] < nitrogen.weekAdded[j]){
-              newsource.Organic[i] = 0;
-              newsource.NH4[i] = 0;
-              newsource.NO3pulse[i] = 0;
-            }
-            else if (effectiveWeeks[i] == nitrogen.weekAdded[j]){
+           
+            
+            newsource.Organic[i] = 0;
+            newsource.NH4[i] = 0;
+            newsource.NO3pulse[i] = 0;
+            
+            if (effectiveWeeks[i] == nitrogen.weekAdded[j]){
               newsource.Organic[i] = nitrogen.organicNitrogen[j];
               newsource.NH4[i] = nitrogen.ammoniumNitrogen[j];
               newsource.NO3pulse[i] = nitrogen.nitrateNitrogen[j];
             }
-            else {
-              newsource.Organic[i] =  -nitrogen.ammonificationRate[j] * 0 ;
-              newsource.NH4[i] = nitrogen.ammonificationRate[j] * 0 - nitrogen.nitrificationRate[j] * 0 +
-                rateRelease * 0;
-              newsource.NO3pulse[i] = newsource.fromNH4[i] - newsource.fromNH4[i] * newsource.BugDemand[i];
-            }
+            
             newsource.NO3total[i] = newsource.NO3pulse[i];
             if (effectiveWeeks[i] == nitrogen.weekAdded[j]){
               newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.NH4[i] + nitrogen.nitrateNitrogen[j];
@@ -892,30 +914,84 @@ var rainfallProfiles = [
               newsource.NO3pulse[i] = newsource.fromNH4[i] - newsource.fromNH4[i] * newsource.BugDemand[i];
             }
 
-            var frac = fractionRootZone[i+1].slice(1, i+1).reverse();
-            var no3pulse = newsource.NO3pulse.slice(0, i);
-            var sum = 0; for (var k=0; k<i; k++) sum += frac[k] * no3pulse[k];
+
+            // Equation for newsource.NO3rootzone[i]
+            // i = 2, F302:
+            // =F$225*F296  +F$226*E301+F$227*D301+ IF(F$100=$E47,$H47,0)
+            // F$225 = fractionRootZone[i][0], F296 =  newsource.fromNH4[i]
+            // F$266 = fractionRootZone[i][1], E301 = newsource.NO3pulse[i-1]
+            // F$227 = fractionRootZone[i][i], D301 = newsource.NO3pulse[0]
+            
+            // i = 3, G302:
+            // =G$225*G296  +G$226*F301+G$227*E301+G$228*D301+ IF(G$100=$E47,$H47,0)
+            // G$225 = fractionRootZone[i][0], G296 = newsource.fromNH4[i]
+            // G$226 = fractionRootZone[i][1], F301 = newsource.NO3pulse[i-1]
+            // G$227 = fractionRootZone[i][2], E301 = newsource.NO3pulse[1]
+            // G$228 = fractionRootZone[i][i=3], D301 = newsource.NO3pulse[0]
+            
+            // i = 15, S302 
+            // =S$225*S296  +S$226*R301+S$227*Q301+S$228*P301+S$229*O301+S$230*N301+S$231*M301+S$232*L301+S$233*K301+S$234*J301+S$235*I301+S$236*H301+S$237*G301+S$238*F301+S$239*E301+S$240*D301+ IF(S$100=$E47,$H47,0)
+            
+
+            var frac = fractionRootZone[i+1].slice(1, i+1);
+            var no3pulse = newsource.NO3pulse.slice(0, i).reverse();
+            
+            if (j == 0 && i==15) {
+              console.log(fractionRootZone[i+1]);
+              console.log('frac = ' + frac + '\n');
+              console.log(newsource.NO3pulse);
+              console.log('no3pulse = ' + no3pulse + '\n');
+              //console.log(fractionRootZone[i][0] * newsource.fromNH4[i] + '\n');
+            }
+
+            var sum = 0; for (var k=0; k<frac.length; k++) {
+              sum += frac[k] * no3pulse[k];
+            }
+            
+            newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.fromNH4[i] + sum;
+            
             if (effectiveWeeks[i] == nitrogen.weekAdded[j]){
               newsource.NO3total[i] = newsource.NO3pulse[i];
-              newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.fromNH4[i] +
-                sum + nitrogen.nitrateNitrogen[j];
+              newsource.NO3rootzone[i] += nitrogen.nitrateNitrogen[j];
             }
             else {
               newsource.NO3total[i] = newsource.NO3total[i-1] + newsource.fromNH4[i] -
                 newsource.BugDemand[i-1] * newsource.fromNH4[i-1]
-              newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.fromNH4[i] + sum;
             }
-            if (rootDepth.x[i] == 0) newsource.NAvail[i] = 0;
-            else newsource.NAvail[i] = newsource.NO3rootzone[i] + newsource.NH4[i];
+            
+            
+            newsource.NAvail[i] = 0;
+            if (rootDepth.x[i] != 0) newsource.NAvail[i] = newsource.NO3rootzone[i] + newsource.NH4[i];
+            
             newsource.Total[i] = newsource.NO3total[i] + newsource.BugN[i] + newsource.NH4[i] + newsource.Organic[i];
             if (newsource.Total[i] > 0) newsource.NAvailFraction[i] = newsource.NAvail[i] / newsource.Total[i];
+            
+            if (j == 0 && i==15) {
+              console.log('newsource.NO3rootzone[15] = ' + newsource.NO3rootzone[i] + '\n');
+              console.log('newsource.NAvail[15] = ' + newsource.NAvail[i] + '\n');
+              
+            }
+            //if (j == 0) console.log('newsource.Total[' + i + '] = ' + newsource.Total[i] + '\n');
           }
           newsource.NO3rootzone[0] = 0;
         }
       Nsources[j] = newsource;
+      
+      //of (j==4) console.log(newsource.)
       }
+      
+console.log(JSON.stringify(Nsources[0].Organic));console.log('\n'); // ok
+//console.log('NH4 = ' + JSON.stringify(Nsources[0].NH4));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].fromNH4));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].BugDemand));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].LeachDemand));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].BugN));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].NO3total));console.log('\n'); // ok
+console.log('NO3pulse = ' + JSON.stringify(Nsources[0].NO3pulse));console.log('\n'); // ok
+console.log('NO3rootzone = ' + JSON.stringify(Nsources[0].NO3rootzone));console.log('\n');
+console.log('Navail = ' + JSON.stringify(Nsources[0].NAvail));console.log('\n');
 
-
+console.log(nitrogen.nitrateNitrogen);
 
       // CALCULATE N FROM TOTAL OF SOURCES
 
@@ -951,7 +1027,7 @@ var rainfallProfiles = [
         }
       }
       
-      //console.log(JSON.stringify(Nsources[0]));
+      
 
       // What do I need to return??
       var ret = {
@@ -1001,7 +1077,8 @@ var rainfallProfiles = [
           //console.log('val1= ' + val1);
           
           // val2 = OFFSET(R303,0,$G$60)
-          var val2 = Nsources[j].NAvail[w0col + startNAvail - 1];
+          //var val2 = Nsources[j].NAvail[w0col + startNAvail - 1];
+           var val2 = Nsources[j].NAvail[w0col + startNAvail];
           
           // val3 = OFFSET(R303,0,$G$61)
           var val3 = Nsources[j].NAvail[w0col + endNAvail - 1];
@@ -1016,6 +1093,7 @@ var rainfallProfiles = [
           kn[j] = val4/val5/availe[j];
           }
         }
+        console.log(availe[j] + ' ' + kn[j]);
       }
 
       var ret = {
@@ -1190,7 +1268,7 @@ var rainfallProfiles = [
 
 
     function simpleSYN(currentCrop, currentPotentialYield, currentCropBasePrice,
-      soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried){
+      soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried, fertiliserData, cropData){
       // Run a SYN scenario
     
       soil = soil[0]; // Need this because R sends the soil object as an array
@@ -1246,99 +1324,4 @@ var rainfallProfiles = [
       }
       
       
-  function yieldSensitivityAnalysis(crop, pyield, price, soil, oc, weeklyRain, fertilisersAdded, 
-    ron) {
-      
-      var min = 1;
-      var max = 5;
-      var step = (max - min) / 10;
-
-      var data = {
-         index: [],
-         actualYield: [],
-         percentProtein: [],
-         priceReceived: [],
-         netReturn: []
-       };
-
-      for (var i=min; i<=max; i+=step){
-        var ret = simpleSYN(crop, i, price, soil, oc, weeklyRain,
-          fertilisersAdded, ron.value, fertiliserData, cropData);
-        data.index.push(round1(i));
-        data.actualYield.push(round2(ret.actualYield));
-        data.percentProtein.push(round1(ret.percentProtein));
-        data.priceReceived.push(Math.round(ret.price));
-        data.netReturn.push(Math.round(ret.netReturn));
-      }
-      return data;
-  }
-  
-  function fertiliserRateSensitivityAnalysis(fert, crop, pyield, price, soil, oc, weeklyRain, 
-    fertilisersAdded, ron) {
-      
-      var min = 0;
-      var max = 120;
-      var step = (max - min) / 10;
-
-      var data = {
-         index: [],
-         actualYield: [],
-         percentProtein: [],
-         priceReceived: [],
-         netReturn: []
-       };
-       
-      var fertAdded = JSON.parse(JSON.stringify(fertilisersAdded));
-      var fertNames = fertAdded.map(function(a) { return a.name; });
-      var j = fertNames.indexOf(fert);
-
-      for (var i=min; i<=max; i+=step){
-        fertAdded[j].rate = i;
-        var ret = simpleSYN(crop, pyield, price, soil, oc, weeklyRain,
-          fertAdded, ron.value, fertiliserData, cropData);
-
-        data.index.push(round1(i));
-        data.actualYield.push(round2(ret.actualYield));
-        data.percentProtein.push(round1(ret.percentProtein));
-        data.priceReceived.push(Math.round(ret.price));
-        data.netReturn.push(Math.round(ret.netReturn));
-      }
-      return data;
-  }
-  
-  function weekAppliedSensitivityAnalysis(fert, crop, pyield, price, soil, oc, weeklyRain, 
-    fertilisersAdded, ron) {
-      
-      var min = 0;
-      var max = 14;
-      var step = 1;
-
-      var data = {
-         index: [],
-         actualYield: [],
-         percentProtein: [],
-         priceReceived: [],
-         netReturn: []
-       };
-       
-      var fertAdded = JSON.parse(JSON.stringify(fertilisersAdded));
-      var fertNames = fertAdded.map(function(a) { return a.name; });
-      var j = fertNames.indexOf(fert);
-
-      for (var i=min; i<=max; i+=step){
-        fertAdded[j].weekApplied = i;
-        var ret = simpleSYN(crop, pyield, price, soil, oc, weeklyRain,
-          fertAdded, ron.value, fertiliserData, cropData);
-
-        data.index.push(round1(i));
-        data.actualYield.push(round2(ret.actualYield));
-        data.percentProtein.push(round1(ret.percentProtein));
-        data.priceReceived.push(Math.round(ret.price));
-        data.netReturn.push(Math.round(ret.netReturn));
-      }
-      return data;
-  }
-  
-
-
  

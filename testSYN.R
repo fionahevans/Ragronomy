@@ -41,16 +41,21 @@ getRainfallProfilesSYN()
 weeklyRain <- getWeeklyRainSYN(5)
 
 # fertilisersAdded based on fertilisers returned by getFertiliserDataSYN
+fertiliserData <- getFertiliserDataSYN()
+fertiliserData <- subset(fertiliserData, name %in% c("DAP", "Urea", "nitrate"))
 fertilisersAdded <- data.frame(name=c("DAP", "Urea", "nitrate"), weekApplied=c(0, 4, -14), netRate=c(15, 30, 50))
 
 
 # RONcarried can be calculated from paddock history
 RONcarried <- calculateRON(paddockHistory)
 
+# cropData is used for calculating protein premiums
+cropData <- getCropDataSYN()
 
-SYN(currentCrop, currentPotentialYield, currentCropBasePrice,
+
+SYN(currentCrop, currentPotentialYield , currentCropBasePrice,
                       soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, 
-                      RONcarried)
+                      RONcarried, fertiliserData, cropData)
 
 
 x <- seq(from=0, to=5, by=0.01)
@@ -58,4 +63,13 @@ y <- tanh(x)
 plot(x, y)
 
 # R tanh and Excel give the same answers, but R from v8 truncates to four decimal places.
+
+
+fs <- fertiliserRateSensitivityAnalysis("Urea", currentCrop, currentPotentialYield , currentCropBasePrice,
+                                              soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, 
+                                              RONcarried, fertiliserData, cropData)
+  
+with(fs, plot(rate, actualYield, type="l")) 
+  
+  
 

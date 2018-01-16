@@ -2,7 +2,7 @@ Package: Ragronomy
 Version: 1.0
 Date: 2017-10-10
 Title: Functions for agronomic modelling.
-Author: Fiona H Evans <fiona.evans@graduate.uwa.edu.au>
+Author: Fiona H Evans <fiona.evans@graduate.uwa.edu.au>, Rebecca O'Leary
 Maintainer: Fiona H Evans <fiona.evans@graduate.uwa.edu.au>
 Depends:
     R (>= 3.0.0)
