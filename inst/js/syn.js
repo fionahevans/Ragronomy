@@ -788,10 +788,12 @@ var rainfallProfiles = [
         nitrogen.name.push(fertiliser.name);
         nitrogen.weekAdded.push(fertiliser.weekApplied);
         nitrogen.weekAddedSensitivity.push(fertiliser.weekApplied);
-        nitrogen.organicNitrogen.push(Math.round(fertiliserData[indx].urea * fertiliser.rate)); 
-        nitrogen.ammoniumNitrogen.push(Math.round(fertiliserData[indx].nh4n * fertiliser.rate));
-        nitrogen.nitrateNitrogen.push(Math.round(fertiliserData[indx].no3n * fertiliser.rate));
-        
+        nitrogen.organicNitrogen.push(fertiliserData[indx].urea * fertiliser.rate); 
+        nitrogen.ammoniumNitrogen.push(fertiliserData[indx].nh4n * fertiliser.rate);
+        nitrogen.nitrateNitrogen.push(fertiliserData[indx].no3n * fertiliser.rate);
+        //nitrogen.organicNitrogen.push(Math.round(fertiliserData[indx].urea * fertiliser.rate)); 
+        //nitrogen.ammoniumNitrogen.push(Math.round(fertiliserData[indx].nh4n * fertiliser.rate));
+        //nitrogen.nitrateNitrogen.push(Math.round(fertiliserData[indx].no3n * fertiliser.rate));
         nitrogen.ammonificationRate.push(fertiliserData[indx].ammonificationRate);
         nitrogen.nitrificationRate.push(fertiliserData[indx].nitrificationRate);
       }

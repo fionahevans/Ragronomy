@@ -333,10 +333,9 @@ SYN <- function(currentCrop, currentPotentialYield, currentCropBasePrice,
 #' 
 #' @export
 fertiliserRateSensitivityAnalysis <- function(fert, crop, pyield, price, soil, oc, weeklyRain, 
-                                              fertilisersAdded, ron, fertiliserData, cropData){
+                                              fertilisersAdded, ron, fertiliserData, cropData, rates=seq(from=0, to=120, by=12)){
   
-  sq <- seq(from=0, to=120, by=12)
-  
+  sq <- rates
   data <- data.frame(rate = rep(NA, length(sq)),
                      actualYield = rep(NA, length(sq)),
                      percentProtein = rep(NA, length(sq)),

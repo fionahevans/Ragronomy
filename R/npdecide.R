@@ -80,7 +80,7 @@ yfunc3 <- function(rate) {
 #' @details The NPdecide model is described in detail in Robertson, M. J., Lyle, G and 
 #' Bowden J. W. (2008), 
 #' Within-field variability of wheat yield and economic implications for spatially variable 
-#' nutrient management, Field Crops Research Vol 105(3), pp211-220.
+#' nutrient management, Field Crops Research Vol 105(3), pp 211-220.
 #' 
 #' Input parameters CstP, cFertN, Cst, cfertN, Nst and Pst relate to amoutn of fertilisers already
 #' available int he soil, and the responsiveness of the soil to added fertilisers. Initial values
@@ -143,7 +143,7 @@ NPdecide <- function(Nrate,
 #' @details The NPdecide model is described in detail in Robertson, M. J., Lyle, G and 
 #' Bowden J. W. (2008), 
 #' Within-field variability of wheat yield and economic implications for spatially variable 
-#' nutrient management, Field Crops Research Vol 105(3), pp211-220.
+#' nutrient management, Field Crops Research Vol 105(3), pp 211-220.
 #' 
 #' Input parameters CstP, cFertN, Cst, cfertN, Nst and Pst relate to amoutn of fertilisers already
 #' available int he soil, and the responsiveness of the soil to added fertilisers. Initial values
@@ -203,7 +203,7 @@ Ndecide <- function(Nrate,
 #' @details The NPdecide model is described in detail in Robertson, M. J., Lyle, G and 
 #' Bowden J. W. (2008), 
 #' Within-field variability of wheat yield and economic implications for spatially variable 
-#' nutrient management, Field Crops Research Vol 105(3), pp211-220.
+#' nutrient management, Field Crops Research Vol 105(3), pp 211-220.
 #' 
 #' Input parameters CstP, cFertN, Cst, cfertN, Nst and Pst relate to amoutn of fertilisers already
 #' available int he soil, and the responsiveness of the soil to added fertilisers. Initial values
