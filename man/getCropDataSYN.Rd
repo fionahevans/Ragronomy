@@ -7,7 +7,8 @@
 getCropDataSYN()
 }
 \description{
-Return crop data used by the SYN model.
+Return crop data used by the SYN model. This data is used to calculate price adjustments 
+for different protein / oil percentages in the grain.
 }
 \author{
 Fiona Evans

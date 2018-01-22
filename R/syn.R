@@ -227,10 +227,24 @@ calculateRON <- function(paddockHistory) {
   output
 }
 
+#' SYNdoc
+#' 
+#' View documentation for the original Excel spreadsheet 
+#' version of the Select Your Nitroegn (SYN) model.
+#' 
+#' @author Fiona Evans
+#' 
+#' @export
+SYNdoc <- function() {
+  f <- system.file("doc", "Select Your Nitrogen Users Manual.pdf", package = "Ragronomy")
+  shell.exec(normalizePath(f))
+}
+
 
 #' SYN
 #' 
-#' Run the SYN model.
+#' Run the SYN model. This version of the SYN model has been encoded from the original Excel spreadsheet 
+#' version of the model, available from: 
 #' 
 #' @author Fiona Evans
 #' 
@@ -245,6 +259,11 @@ calculateRON <- function(paddockHistory) {
 #' @param RONcarried numeric, can be calculated from paddock history.
 #' 
 #' @examples 
+#' # Read model documentation for the original spreadsheet model:
+#' f <- system.file("doc", "Select Your Nitrogen Users Manual.pdf", package = "Ragronomy")
+#' shell.exec(normalizePath(f))
+#' 
+#' # Set model inputs
 #' currentCrop <- "ASW"
 #' 
 #' currentPotentialYield <- 2
@@ -268,6 +287,7 @@ calculateRON <- function(paddockHistory) {
 #' fertiliserData <- getFertiliserDataSYN()
 #' cropData <- getCropDataSYN()
 #' 
+#' # Run the model
 #' SYN(currentCrop, currentPotentialYield, currentCropBasePrice,
 #'     soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, 
 #'    RONcarried, fertiliserData, cropData)

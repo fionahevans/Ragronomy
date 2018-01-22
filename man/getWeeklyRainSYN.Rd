@@ -2,15 +2,31 @@
 % Please edit documentation in R/syn.R
 \name{getWeeklyRainSYN}
 \alias{getWeeklyRainSYN}
-\title{getRainfallProfilesSYN}
+\title{getWeeklyRainSYN}
 \usage{
 getWeeklyRainSYN(index)
 }
 \arguments{
-\item{index}{Index of rainfall rpofile to use.}
+\item{index}{Index of rainfall profile}
 }
 \description{
-Return data frame of weekly rainfall profiles used by the SYN model.
+Return data frame of weekly rainfall data for a specific default rainfall profile used by the SYN model. 
+The returned data frame has two columns: 'week' specifying week numbers-14 to 15 from the date of seeding; 
+and 'rain' specifying the leaching/infiltrating rainfall for each week. From the 'Select Your Nitrogen' user
+guide: 
+"This is leaching/infiltrating rainfall NOT total (gauge) rainfall, i.e. the rainfall that is
+left to leach through the soil profile after run-off and evaporation are accounted for. Run-off
+depends on many factors including slope of the land, microrelief, surface cover, soil
+wettability, surface sealing and soil structure, as well as the intensity and duration of the
+rainfall events. No guidelines for the conversion of gauge rainfall to infiltrating rain are
+possible. It is left to the user to estimate what proportion of any rainfall has infiltrated. For
+long term average inputs it is probably appropriate to use about 90% of gauge rainfall.
+Subtraction of estimates of weekly pan evaporation from the gauge rainfall will
+overestimate the losses. However, rainfall events after 8-10 weeks beyond seeding should
+be heavily discounted, because evapotranspiration will have caused considerable drying
+Note: Rainfall entered here only affects the availability of nitrogen. SYN is NOT a crop
+growth simulation model and so the rainfall does NOT affect the yield. Yield can only be
+adjusted by the user when he/she changes the potential yield parameter."
 }
 \author{
 Fiona Evans

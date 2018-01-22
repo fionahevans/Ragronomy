@@ -26,9 +26,15 @@ SYN(currentCrop, currentPotentialYield, currentCropBasePrice, soil,
 \item{RONcarried}{numeric, can be calculated from paddock history.}
 }
 \description{
-Run the SYN model.
+Run the SYN model. This version of the SYN model has been encoded from the original Excel spreadsheet 
+version of the model, available from:
 }
 \examples{
+# Read model documentation for the original spreadsheet model:
+f <- system.file("doc", "Select Your Nitrogen Users Manual.pdf", package = "Ragronomy")
+shell.exec(normalizePath(f))
+
+# Set model inputs
 currentCrop <- "ASW"
 
 currentPotentialYield <- 2
@@ -49,9 +55,13 @@ fertilisersAdded <- data.frame(name=c("DAP", "Urea", "nitrate"),
 
 RONcarried <- calculateRON(paddockHistory)
 
+fertiliserData <- getFertiliserDataSYN()
+cropData <- getCropDataSYN()
+
+# Run the model
 SYN(currentCrop, currentPotentialYield, currentCropBasePrice,
     soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, 
-   RONcarried)
+   RONcarried, fertiliserData, cropData)
 
 }
 \author{

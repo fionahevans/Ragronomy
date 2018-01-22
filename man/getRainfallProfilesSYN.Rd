@@ -7,7 +7,7 @@
 getRainfallProfilesSYN()
 }
 \description{
-Return names of weekly rainfall profiles used by the SYN model.
+Return names of weekly rainfall profiles provided for default use by the SYN model.
 }
 \author{
 Fiona Evans
