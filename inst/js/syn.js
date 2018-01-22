@@ -788,10 +788,6 @@ var rainfallProfiles = [
         nitrogen.name.push(fertiliser.name);
         nitrogen.weekAdded.push(fertiliser.weekApplied);
         nitrogen.weekAddedSensitivity.push(fertiliser.weekApplied);
-        // added rounding 14/12/17
-        //nitrogen.organicNitrogen.push(fertiliserData[indx].urea * fertiliser.rate); 
-        //nitrogen.ammoniumNitrogen.push(fertiliserData[indx].nh4n * fertiliser.rate);
-        //nitrogen.nitrateNitrogen.push(fertiliserData[indx].no3n * fertiliser.rate);
         nitrogen.organicNitrogen.push(Math.round(fertiliserData[indx].urea * fertiliser.rate)); 
         nitrogen.ammoniumNitrogen.push(Math.round(fertiliserData[indx].nh4n * fertiliser.rate));
         nitrogen.nitrateNitrogen.push(Math.round(fertiliserData[indx].no3n * fertiliser.rate));
@@ -800,7 +796,7 @@ var rainfallProfiles = [
         nitrogen.nitrificationRate.push(fertiliserData[indx].nitrificationRate);
       }
       
-      //console.log(JSON.stringify(nitrogen));
+
 
       // Nitrogen sources: soil organic nitrogen, residue organic nitrogen, added fertilisers
 
@@ -816,9 +812,7 @@ var rainfallProfiles = [
         frz[i] = getCol(fractionRootZone, i); 
         frz[i].shift();
       }
-      // console.log('fractionRootZone[0] = ' + fractionRootZone[0] + '\n');
-      //console.log('frz[15] = ' + frz[15] + '\n');
-
+      
 
       for (var j=0; j<2+fertilisersAdded.length; j++){
         
@@ -843,11 +837,6 @@ var rainfallProfiles = [
         }
 
         newsource.BugDemand[0] = rateCapture;
-        
-        if (j==0) {
-          console.log(effectiveWeeks);
-          console.log(nitrogen.weekAdded);
-        }
 
         for (var i=0; i<effectiveRain.length-1; i++){
 
@@ -936,13 +925,7 @@ var rainfallProfiles = [
             var frac = fractionRootZone[i+1].slice(1, i+1);
             var no3pulse = newsource.NO3pulse.slice(0, i).reverse();
             
-            if (j == 0 && i==15) {
-              console.log(fractionRootZone[i+1]);
-              console.log('frac = ' + frac + '\n');
-              console.log(newsource.NO3pulse);
-              console.log('no3pulse = ' + no3pulse + '\n');
-              //console.log(fractionRootZone[i][0] * newsource.fromNH4[i] + '\n');
-            }
+            
 
             var sum = 0; for (var k=0; k<frac.length; k++) {
               sum += frac[k] * no3pulse[k];
@@ -966,32 +949,26 @@ var rainfallProfiles = [
             newsource.Total[i] = newsource.NO3total[i] + newsource.BugN[i] + newsource.NH4[i] + newsource.Organic[i];
             if (newsource.Total[i] > 0) newsource.NAvailFraction[i] = newsource.NAvail[i] / newsource.Total[i];
             
-            if (j == 0 && i==15) {
-              console.log('newsource.NO3rootzone[15] = ' + newsource.NO3rootzone[i] + '\n');
-              console.log('newsource.NAvail[15] = ' + newsource.NAvail[i] + '\n');
-              
-            }
-            //if (j == 0) console.log('newsource.Total[' + i + '] = ' + newsource.Total[i] + '\n');
+            
           }
           newsource.NO3rootzone[0] = 0;
         }
       Nsources[j] = newsource;
       
-      //of (j==4) console.log(newsource.)
+      
       }
       
-console.log(JSON.stringify(Nsources[0].Organic));console.log('\n'); // ok
+//console.log(JSON.stringify(Nsources[0].Organic));console.log('\n'); // ok
 //console.log('NH4 = ' + JSON.stringify(Nsources[0].NH4));console.log('\n'); // ok
 //console.log(JSON.stringify(Nsources[0].fromNH4));console.log('\n'); // ok
 //console.log(JSON.stringify(Nsources[0].BugDemand));console.log('\n'); // ok
 //console.log(JSON.stringify(Nsources[0].LeachDemand));console.log('\n'); // ok
 //console.log(JSON.stringify(Nsources[0].BugN));console.log('\n'); // ok
 //console.log(JSON.stringify(Nsources[0].NO3total));console.log('\n'); // ok
-console.log('NO3pulse = ' + JSON.stringify(Nsources[0].NO3pulse));console.log('\n'); // ok
-console.log('NO3rootzone = ' + JSON.stringify(Nsources[0].NO3rootzone));console.log('\n');
-console.log('Navail = ' + JSON.stringify(Nsources[0].NAvail));console.log('\n');
-
-console.log(nitrogen.nitrateNitrogen);
+//console.log('NO3pulse = ' + JSON.stringify(Nsources[0].NO3pulse));console.log('\n'); // ok
+//console.log('NO3rootzone = ' + JSON.stringify(Nsources[0].NO3rootzone));console.log('\n');
+//console.log('Navail = ' + JSON.stringify(Nsources[0].NAvail));console.log('\n');
+//console.log(nitrogen.nitrateNitrogen);
 
       // CALCULATE N FROM TOTAL OF SOURCES
 
@@ -1048,9 +1025,6 @@ console.log(nitrogen.nitrateNitrogen);
       var nitrogen = nitrogenSources.nitrogen;
       var Nsources = nitrogenSources.Nsources;
       
-      //console.log(JSON.stringify(Nsources[4].NAvail));
-      
-
       var kn = array(0, 2+fertilisersAdded.length);
       var availe = array(0, 2+fertilisersAdded.length);
       var startNAvail = 4;
@@ -1093,7 +1067,7 @@ console.log(nitrogen.nitrateNitrogen);
           kn[j] = val4/val5/availe[j];
           }
         }
-        console.log(availe[j] + ' ' + kn[j]);
+        
       }
 
       var ret = {
