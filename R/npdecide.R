@@ -135,7 +135,7 @@ NPdecide <- function(Nrate,
 #' Nrate <- seq(from=0, to=200, by=20) 
 #' Nyield <- rep(NA, length(Nrate))
 #' for (i in 1:length(Nrate)) {
-#'   Nyield[i] <- NPdecide(Nrate[i], Ypot=3000)$yield
+#'   Nyield[i] <- Ndecide(Nrate[i], Ypot=3000)$yield
 #' }
 #' 
 #' plot(Nrate, Nyield, type="b", main="Yield response to N (P non-limiting)", xlab="Yield (kg/ha)") 
@@ -153,8 +153,7 @@ NPdecide <- function(Nrate,
 #' The model is also used in an online tool: http://optimiser.csiro.au/
 #' 
 #' @export
-Ndecide <- function(Nrate,    
-                     Prate,
+Ndecide <- function( Nrate,    
                      Ypot,    
                      CstN=0.05,     
                      CfertN=0.03,   
@@ -195,7 +194,7 @@ Ndecide <- function(Nrate,
 #' Prate <- seq(from=0, to=30, by=2) 
 #' Pyield <- rep(NA, length(Prate))
 #' for (i in 1:length(Prate)) {
-#'   Pyield[i] <- NPdecide(500, Prate[i], Ypot=3000)$yield
+#'   Pyield[i] <- Pdecide(500, Prate[i], Ypot=3000)$yield
 #' }
 #' 
 #' plot(Prate, Pyield, type="b", main="Yield response to P (N non-limiting)", xlab="Yield (kg/ha)") 
@@ -213,8 +212,7 @@ Ndecide <- function(Nrate,
 #' The model is also used in an online tool: http://optimiser.csiro.au/
 #' 
 #' @export
-Pdecide <- function(Nrate,    
-                     Prate,
+Pdecide <- function( Prate,
                      Ypot,    
                      CstP=0.12,     
                      CfertP=0.06,   

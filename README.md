@@ -28,6 +28,8 @@ Ragronomy:  R package containing functions for agronomic scenario modelling
   * soil type
   * amount of organic carbon in the soil
   * crop type, crop price and yield potential 
-  
+ 
+ 
+Documentation for the original NPdecide too is provided as part of this package: https://github.com/fionahevans/Ragronomy/blob/master/inst/doc/NPDECIDE%20-%20Users%20Manual.pdf.
 
-This package uses a Javascript version of Select Your Nitrogen (SYN) that is linked to R using the V8 package, see: https://cran.r-project.org/web/packages/V8/vignettes/v8_intro.html. The Javascript code was created using the original spreadsheet version of the model, available from the Western Australian Department of Primary Industries and Regional Development, https://www.agric.wa.gov.au/soils/soils-decision-support-tools. The only documentation for the model and spreadsheet tool is in the form of the Users Manual, provided as a part of this package: https://github.com/fionahevans/Ragronomy/blob/master/inst/doc/Select%20Your%20Nitrogen%20Users%20Manual.pdf.
+This package uses a Javascript version of Select Your Nitrogen (SYN) that is linked to R using the V8 package, see: https://cran.r-project.org/web/packages/V8/vignettes/v8_intro.html. The Javascript code was created using the original spreadsheet version of the model, available from the Western Australian Department of Primary Industries and Regional Development, https://www.agric.wa.gov.au/soils/soils-decision-support-tools. The only documentation for the model and spreadsheet tool is in the form of the Users Manual, provided as part of this package: https://github.com/fionahevans/Ragronomy/blob/master/inst/doc/Select%20Your%20Nitrogen%20Users%20Manual.pdf.

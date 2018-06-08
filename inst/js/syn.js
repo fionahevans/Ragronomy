@@ -13,6 +13,10 @@ function tanh (arg) {
     return (Math.exp(arg) - Math.exp(-arg)) / (Math.exp(arg) + Math.exp(-arg));
 }
 
+var parameters = [
+  
+];
+
 
 var soils = [ 
   {"name":"Clay","fieldCapacity":0.35,"wiltingPoint":0.16,"gravelContent":0,
@@ -33,8 +37,6 @@ var soils = [
       "rootHospitality":"Normal","initDepthOfWettingFront":0},
   {"name":"Sand","fieldCapacity":0.1,"wiltingPoint":0.05,"gravelContent":0.6,
       "rootHospitality":"Normal","initDepthOfWettingFront":0},
-  {"name":"Copy of Loamy Sand 60% gravel","fieldCapacity":0.11,"wiltingPoint":0.05,"gravelContent":0.6,
-      "rootHospitality":"Normal","initDepthOfWettingFront":0}
 ];
 
 
@@ -1232,11 +1234,11 @@ var rainfallProfiles = [
 
 
 
-    function select_your_nitrogen(currentCrop, currentTill, currentPotentialYield, currentCropBasePrice,
+    function SYN(currentCrop, currentTill, currentPotentialYield, currentCropBasePrice,
       soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, paddockHistory, fertiliserData, cropData){
     // Run a SYN scenario
 
-      var ronCalc = calculateRON(paddockHistory);
+      var ronCarried = calculateRON(paddockHistory);
 
       return simpleSYN(currentCrop, currentPotentialYield, currentCropBasePrice,
       soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried, fertiliserData, cropData);
