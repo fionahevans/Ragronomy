@@ -4,8 +4,8 @@
 \alias{Ndecide}
 \title{Ndecide}
 \usage{
-Ndecide(Nrate, Prate, Ypot, CstN = 0.05, CfertN = 0.03, Nst = 30,
-  Area = NULL, P_y = NULL, P_nfert = NULL)
+Ndecide(Nrate, Ypot, CstN = 0.05, CfertN = 0.03, Nst = 30, Area = NULL,
+  P_y = NULL, P_nfert = NULL)
 }
 \arguments{
 \item{Nrate}{N rate (kg/ha)}
@@ -50,7 +50,7 @@ The model is also used in an online tool: http://optimiser.csiro.au/
 Nrate <- seq(from=0, to=200, by=20) 
 Nyield <- rep(NA, length(Nrate))
 for (i in 1:length(Nrate)) {
-  Nyield[i] <- NPdecide(Nrate[i], Ypot=3000)$yield
+  Nyield[i] <- Ndecide(Nrate[i], Ypot=3000)$yield
 }
 
 plot(Nrate, Nyield, type="b", main="Yield response to N (P non-limiting)", xlab="Yield (kg/ha)") 

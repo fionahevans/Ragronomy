@@ -24,6 +24,10 @@ SYN(currentCrop, currentPotentialYield, currentCropBasePrice, soil,
 \item{fertilisersAdded}{based on fertilisers returned by getFertiliserDataSYN, see examples for format}
 
 \item{RONcarried}{numeric, can be calculated from paddock history.}
+
+\item{fertiliserData}{Fertiliser data and costs, an example can be obtained using getFertiliserDataSYN()}
+
+\item{cropData}{Data for protein premium calculations, an example can be obtained using getCropDataSYN()}
 }
 \description{
 Run the SYN model. This version of the SYN model has been encoded from the original Excel spreadsheet 

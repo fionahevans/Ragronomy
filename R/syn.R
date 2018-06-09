@@ -257,6 +257,8 @@ SYNdoc <- function() {
 #' @param weeklyRain weeklyRain is a rainfall profile, use getRainfallProfilesSYN
 #' @param fertilisersAdded based on fertilisers returned by getFertiliserDataSYN, see examples for format
 #' @param RONcarried numeric, can be calculated from paddock history.
+#' @param fertiliserData Fertiliser data and costs, an example can be obtained using getFertiliserDataSYN()
+#' @param cropData Data for protein premium calculations, an example can be obtained using getCropDataSYN()
 #' 
 #' @examples 
 #' # Read model documentation for the original spreadsheet model:
@@ -342,6 +344,63 @@ SYN <- function(currentCrop, currentPotentialYield, currentCropBasePrice,
   output
 }
 
+
+#' SYNsensitivity
+#' 
+#' Run the SYN model without the weekly timestep soil water, root growth and leaching part.
+#' 
+#' @author Fiona Evans
+#' 
+#' @param currentCrop  element of c( "ASW", "Premium White wheat", "Hard wheat", "Durum Premium", "Durum General",
+#     "Soft wheat", "Noodle wheat", "Malting barley", "Canola (oil)").
+#' @param currentPotentialYield numeric (t/ha)
+#' @param currentCropBasePrice numeric ($)
+#' @param TON Total Organic Nitrogen object  
+#' @param fertilisersAdded based on fertilisers returned by getFertiliserDataSYN, see examples for format
+#' @param fertiliserData Fertiliser data and costs, an example can be obtained using getFertiliserDataSYN()
+#' @param cropData Data for protein premium calculations, an example can be obtained using getCropDataSYN()
+#' @param parameters Parameters used in yield and protein calculations, these are constants in the SYN function.
+#' 
+#' @export
+SYNsensitivity <- function(currentCrop, currentPotentialYield, currentCropBasePrice,
+                TON, fertilisersAdded, fertiliserData, cropData, parameters){
+  
+  require(V8)
+  
+  fertilisersAdded <- addFertilisers(fertilisersAdded, fertiliserData)
+  
+  # Create session
+  ct <- new_context()
+  fpath <- system.file("js", "syn.js", package="Ragronomy")
+  ct$source(fpath)
+  
+  ct$assign("currentCrop", currentCrop)
+  ct$assign("currentPotentialYield", currentPotentialYield)
+  ct$assign("currentCropBasePrice", currentCropBasePrice)
+  ct$assign("TON", TON)
+  ct$assign("fertilisersAdded", fertilisersAdded)
+  ct$assign("fertiliserData", fertiliserData)
+  ct$assign("cropData", cropData)
+  ct$assign("parameters", parameters)
+  
+  # Evaluate Javascript
+  ct$eval("{
+          JSON.stringify(currentCrop);
+          JSON.stringify(currentPotentialYield);
+          JSON.stringify(currentCropBasePrice);
+          JSON.stringify(TON);
+          JSON.stringify(fertilisersAdded);
+          JSON.stringify(fertiliserData);
+          JSON.stringify(cropData);
+          JSON.stringify(parameters);
+          var output = sensitivitySYN(currentCrop, currentPotentialYield, currentCropBasePrice,
+          TON, fertilisersAdded, fertiliserData, cropData, parameters);
+  }")
+  
+  # Get the output
+  output <- ct$get("output")
+  output
+  }
 
 #' fertiliserRateSensitivityAnalysis
 #' 

@@ -13,10 +13,6 @@ function tanh (arg) {
     return (Math.exp(arg) - Math.exp(-arg)) / (Math.exp(arg) + Math.exp(-arg));
 }
 
-var parameters = [
-  
-];
-
 
 var soils = [ 
   {"name":"Clay","fieldCapacity":0.35,"wiltingPoint":0.16,"gravelContent":0,
@@ -165,7 +161,7 @@ var rainfallProfiles = [
      rainfallProfiles[0].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Default rain - no leaching
@@ -179,7 +175,7 @@ var rainfallProfiles = [
      rainfallProfiles[1].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Dryland rain - leaching
@@ -193,7 +189,7 @@ var rainfallProfiles = [
      rainfallProfiles[2].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Dryland rain - no leaching
@@ -207,7 +203,7 @@ var rainfallProfiles = [
      rainfallProfiles[3].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Dryland summer rain - leaching
@@ -219,7 +215,7 @@ var rainfallProfiles = [
       rainfallProfiles[4].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Dryland summer rain - no leaching
@@ -231,7 +227,7 @@ var rainfallProfiles = [
       rainfallProfiles[5].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Summer rain - leaching
@@ -245,7 +241,7 @@ var rainfallProfiles = [
      rainfallProfiles[6].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
     
     // Summer rain - no leaching
@@ -259,7 +255,7 @@ var rainfallProfiles = [
      rainfallProfiles[7].data[i] = {
         week: week[i],
         rain: rain[i]
-      }
+      };
     }
 
 
@@ -267,7 +263,7 @@ var rainfallProfiles = [
     // Return a sequence of numbers
       var r = [];
       var indx = 0;
-      var by = 1
+      var by = 1;
       if (len > 0) by = (max - min + 1)/len;
 
       for (var i=min; i<=max; i+=by) {
@@ -352,7 +348,7 @@ var rainfallProfiles = [
       var NC_LUPINS_NB = 0.0275;
       var NC_LUPINS_NS = 0.05;
 
-      var RONproduced = paddockHistory[i].yield * 1000 * (NC_LUPINS_NB / hi - NC_LUPINS_NS);
+      var RONproduced = paddockHistory[i].actualYield * 1000 * (NC_LUPINS_NB / hi - NC_LUPINS_NS);
 
       return(RONproduced);
     }
@@ -364,7 +360,7 @@ var rainfallProfiles = [
       var N_NONLEGUME = 1.4/100;
 
       var RONproduced = 0;
-      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].yield*1000)*
+      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].actualYield*1000)*
         (N_LEGUME*paddockHistory[i].legumeContent/100 + N_NONLEGUME*(1-paddockHistory[i].legumeContent/100));
 
      return(RONproduced);
@@ -372,21 +368,24 @@ var rainfallProfiles = [
 
     function nitrogen_in_greenManure(i, paddockHistory) {
     // Calculate residual organic nitrogen (RON) for the i-th element in paddockHistory
+    
+      var yr =  paddockHistory[i].year;
+      var CurrentYear = paddockHistory[0].year;
 
       var N_LEGUME = 2.5/100;
       var N_NONLEGUME = 1.4/100;
 
       var RONproduced = 0;
-      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(year.yield*1000)*
-        (N_LEGUME*year.legumeContent/100 + N_NONLEGUME*(1-year.legumeContent/100));
+      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].actualYield*1000)*
+        (N_LEGUME*paddockHistory[i].legumeContent/100 + 
+        N_NONLEGUME*(1-paddockHistory[i].legumeContent/100));
 
-      var yr =  paddockHistory[i].year;
-      var CurrentYear = paddockHistory[0].year;
+      
 
       if( (CurrentYear-1) == yr){
         // if last year
-        RONproduced = RONproduced/2
-        AmmoniumProduced = RONproduced/2
+        RONproduced = RONproduced/2;
+        //AmmoniumProduced = RONproduced/2;
       }
 
      return(RONproduced);
@@ -404,14 +403,14 @@ var rainfallProfiles = [
           RONproduced: [0,0,0,0],
           ammoniumProduced: [0,0,0,0],
           totalRonCarried: [0,0,0,0]
-        }
+        };
 
       for (var i=paddockHistory.length-1; i>=0; i--){
 
         if (paddockHistory[i].cropPasture == 'green manure') {
-          RON.RONproduced[i] = nitrogen_in_greenManure(i, paddockHistory)
+          RON.RONproduced[i] = nitrogen_in_greenManure(i, paddockHistory);
 
-          if (i == 0) { // half RON produced
+          if (i === 0) { // half RON produced
             RON.RONproduced[i] = RON.RONproduced[i]/2;
 
             // Ammonium produced Only produced by green manure. 
@@ -437,7 +436,7 @@ var rainfallProfiles = [
             RON.totalRonCarried[i]= RON.RONproduced[i];
           }
           else {
-            if (paddockHistory[i].till == true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.5 + RON.RONproduced[i];
+            if (paddockHistory[i].till === true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.5 + RON.RONproduced[i];
             else RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.66 + RON.RONproduced[i];
           }
           
@@ -452,14 +451,14 @@ var rainfallProfiles = [
 
           }
           else {
-            if (paddockHistory[i].till == true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.33 +
+            if (paddockHistory[i].till === true) RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.33 +
                   RON. RONproduced[i];
             else RON.totalRonCarried[i] = RON.totalRonCarried[i+1]*0.5 + RON.RONproduced[i];
           }
         }
 
         if (paddockHistory[i].cropPasture == 'pasture') {
-          RON.RONproduced[i] = nitrogen_in_pasture(i, paddockHistory)
+          RON.RONproduced[i] = nitrogen_in_pasture(i, paddockHistory);
 
 
           // calc total Ron carried
@@ -490,20 +489,22 @@ var rainfallProfiles = [
 
       var wWeeks = weeklyRain.map(function(a) {return a.week;});
       var wRain = weeklyRain.map(function(a) {return a.rain;});
+      
+      var row, w0, w1, w2, w21, w10, w210;
 
       // default week -4 >=50 is True
       // see SYN excel "RON CALCULATIONS" tab, SON and RON Week Added Calculations (R68:T80)
       greater50[8] = true;
 
       for (var i=-12; i<=-5; i++){
-        var row = wWeeks.indexOf(i);
+        row = wWeeks.indexOf(i);
         if (i == -12) {
-          var w2 = wRain[row-2];
-          var w1 = wRain[row-1];
-          var w0 = wRain[row];
-          var w21 = wRain[row-2] + weeklyRain[row-1];
-          var w10 = wRain[row-1] + weeklyRain[row];
-          var w210 = wRain[row-2] + weeklyRain[row-1] + weeklyRain[row];
+          w2 = wRain[row-2];
+          w1 = wRain[row-1];
+          w0 = wRain[row];
+          w21 = wRain[row-2] + weeklyRain[row-1];
+          w10 = wRain[row-1] + weeklyRain[row];
+          w210 = wRain[row-2] + weeklyRain[row-1] + weeklyRain[row];
           if (w2 >= rainData || w1 >= rainData || w0 >= rainData ||
               w21 >= rainDataAweekAdded || w10 >= rainDataAweekAdded || w210 >= rainData2weeksAdded){
                 greater50[week.indexOf(i)] = true;
@@ -517,7 +518,7 @@ var rainfallProfiles = [
       }
       
       for (var j=0; j<greater50.length; j++){
-        if (greater50[j] == true) break;
+        if (greater50[j] === true) break;
       }
 
       weekAdded[0] = week[j];
@@ -528,7 +529,7 @@ var rainfallProfiles = [
           week: week[i],
           greater50:greater50[i],
           weekAdded: weekAdded[i]
-        }
+        };
       }
 
        return(ret);
@@ -553,7 +554,7 @@ var rainfallProfiles = [
 
       // Effective rainfall (mm) = weeks -14 to 15
       var effective = weeklyRain.filter(function (el) {
-        return el.week > -15 && el.week <= 16
+        return el.week > -15 && el.week <= 16;
         });
         
 
@@ -643,7 +644,7 @@ var rainfallProfiles = [
       for (var i=1; i<=effectiveRain.length; i++) { // columns
         bottomDist[i] = array(0, effectiveRain.length);
         for (var j=0; j<effectiveRain.length; j++) { // rows = Age.week
-          if (peakDepth[i][j] != null){
+          if (peakDepth[i][j] !== null){
             if (2*peakDepth[i][j] > wetFrontDepth[i-1]) bottomDist[i][j] = wetFrontDepth[i-1];
             else bottomDist[i][j] = 2*peakDepth[i][j];
           }
@@ -665,8 +666,8 @@ var rainfallProfiles = [
       for (var i=1; i<=effectiveRain.length; i++) { // columns
         peakConcentration[i] = array(0, effectiveRain.length);
         for (var j=0; j<effectiveRain.length; j++) { // rows = Age.week
-          if (bottomDist[i][j] != null){
-            if (bottomDist[i][j] == 0) peakConcentration[i][j] = bottomDist[i][j];
+          if (bottomDist[i][j] !== null){
+            if (bottomDist[i][j] === 0) peakConcentration[i][j] = bottomDist[i][j];
             else peakConcentration[i][j] = 20/bottomDist[i][j];
           }
         }
@@ -691,7 +692,7 @@ var rainfallProfiles = [
       for (var i=week1row; i<=effectiveRain.length; i++) { // columns
         fractionRootZone[i] = array(0, effectiveRain.length);
         for (var j=0; j<effectiveRain.length; j++) { // rows = Age.week
-          if (peakDepth[i][j] != null){
+          if (peakDepth[i][j] !== null){
             if (rootDepth.rootDepth[i-1] < peakDepth[i][j]) {
               fractionRootZone[i][j] = Math.pow(rootDepth.rootDepth[i-1], 2) / (peakDepth[i][j] * bottomDist[i][j]);
             }
@@ -713,7 +714,7 @@ var rainfallProfiles = [
 
 
       // Fraction active layer
-      var fractionActiveLayer = []
+      var fractionActiveLayer = [];
       fractionActiveLayer[0] = seq(0, 30, 31);
 
       for (var i=1; i<=effectiveRain.length; i++) { // columns
@@ -776,7 +777,7 @@ var rainfallProfiles = [
 
       // if (paddockHistory[0].cropPasture == "green manure") ammonificationRate[1] = 0.04; 
       // delete reference to paddockHistory for simplified inputs
-      if (till == true) nitrogen.ammonificationRate[1] = 0.04;
+      if (till === true) nitrogen.ammonificationRate[1] = 0.04;
       else nitrogen.ammonificationRate[1] = 0.03;
 
       nitrogen.nitrificationRate = [0.3, 0.3];
@@ -817,10 +818,11 @@ var rainfallProfiles = [
         frz[i].shift();
       }
       
+      var name;
 
       for (var j=0; j<2+fertilisersAdded.length; j++){
         
-        if (j==0) name = "SON";
+        if (j===0) name = "SON";
         if (j==1) name = "RON";
         if (j > 1) name = fertilisersAdded.name;
 
@@ -838,7 +840,7 @@ var rainfallProfiles = [
           NAvail: array(0, effectiveRain.length),
           NAvailFraction: array(0, effectiveRain.length),
           Total: array(0, effectiveRain.length)
-        }
+        };
 
         newsource.BugDemand[0] = rateCapture;
 
@@ -846,7 +848,7 @@ var rainfallProfiles = [
 
           newsource.BugDemand[i] = rateCapture;
           newsource.LeachDemand[i] = (1 - fractionActiveLayer[i+2][1]);
-          if (i == 0) {
+          if (i === 0) {
             newsource.fromNH4[i] = 0;
             newsource.BugN[i] = 0;
             if ((1 - fractionActiveLayer[i+2][1] + rateCapture) > 1) {
@@ -871,7 +873,7 @@ var rainfallProfiles = [
               newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.NH4[i] + nitrogen.nitrateNitrogen[j];
             }
             else newsource.NO3rootzone[i] = fractionRootZone[i+1][0] * newsource.NH4[i] + 0;
-            if (rootDepth.x[i] == 0) newsource.NAvail[i] = 0;
+            if (rootDepth.x[i] === 0) newsource.NAvail[i] = 0;
             else newsource.NAvail[i] = newsource.NO3rootzone[i] + newsource.NH4[i];
             newsource.Total[i] = newsource.NO3total[i] + newsource.BugN[i] + newsource.NH4[i] + newsource.Organic[i];
             if (newsource.Total[i] > 0) newsource.NAvailFraction[i] = newsource.NAvail[i] / newsource.Total[i];
@@ -943,12 +945,12 @@ var rainfallProfiles = [
             }
             else {
               newsource.NO3total[i] = newsource.NO3total[i-1] + newsource.fromNH4[i] -
-                newsource.BugDemand[i-1] * newsource.fromNH4[i-1]
+                newsource.BugDemand[i-1] * newsource.fromNH4[i-1];
             }
             
             
             newsource.NAvail[i] = 0;
-            if (rootDepth.x[i] != 0) newsource.NAvail[i] = newsource.NO3rootzone[i] + newsource.NH4[i];
+            if (rootDepth.x[i] !== 0) newsource.NAvail[i] = newsource.NO3rootzone[i] + newsource.NH4[i];
             
             newsource.Total[i] = newsource.NO3total[i] + newsource.BugN[i] + newsource.NH4[i] + newsource.Organic[i];
             if (newsource.Total[i] > 0) newsource.NAvailFraction[i] = newsource.NAvail[i] / newsource.Total[i];
@@ -989,7 +991,7 @@ var rainfallProfiles = [
           NAvail: array(0, effectiveRain.length),
           NAvailFraction: array(0, effectiveRain.length),
           Total: array(0, effectiveRain.length)
-        }
+        };
 
       for (var j=0; j<2+fertilisersAdded.length; j++){
         for (var i=0; i<effectiveRain.length-1; i++){
@@ -1033,7 +1035,7 @@ var rainfallProfiles = [
       var availe = array(0, 2+fertilisersAdded.length);
       var startNAvail = 4;
       var endNAvail = 15;
-      var val1;
+      var val1, val2, val3, val4, val5;
       //=IF($G$61-$G$60<0,0,IF(SUM(F47:H47)=0,0,(IF($G$61-$G$60<2,0,SUM(OFFSET(R303,0,$G$60+1,1,$G$61-$G$60-1)))+(OFFSET(R303,0,$G$60)+OFFSET(R303,0,$G$61))/2)/IF($G$61-$G$60=0,1,$G$61-$G$60)/SUM(F47:H47)))
          
       for (var j=0; j<2+fertilisersAdded.length; j++) {
@@ -1042,7 +1044,7 @@ var rainfallProfiles = [
 
         var w0col = effectiveWeeks.indexOf(0);
        
-        if (endNAvail - startNAvail < 0 || availe[j] == 0) kn[j] = 0;
+        if (endNAvail - startNAvail < 0 || availe[j] === 0) kn[j] = 0;
         else {
           if (endNAvail - startNAvail < 2) val1 = 0;
           else {
@@ -1056,17 +1058,17 @@ var rainfallProfiles = [
           
           // val2 = OFFSET(R303,0,$G$60)
           //var val2 = Nsources[j].NAvail[w0col + startNAvail - 1];
-           var val2 = Nsources[j].NAvail[w0col + startNAvail];
+           val2 = Nsources[j].NAvail[w0col + startNAvail];
           
           // val3 = OFFSET(R303,0,$G$61)
-          var val3 = Nsources[j].NAvail[w0col + endNAvail - 1];
+          val3 = Nsources[j].NAvail[w0col + endNAvail - 1];
           
           //console.log('val2= ' + val2);
           //console.log('val3= ' + val3);
  
-          var val4 = val1 + (val2 + val3)/2;
-          if (endNAvail - startNAvail == 0) var val5 = 1;
-          else var val5 = endNAvail - startNAvail;
+          val4 = val1 + (val2 + val3)/2;
+          if (endNAvail - startNAvail === 0) val5 = 1;
+          else val5 = endNAvail - startNAvail;
 
           kn[j] = val4/val5/availe[j];
           }
@@ -1077,9 +1079,7 @@ var rainfallProfiles = [
       var ret = {
         kn: kn,
         availe: availe
-      }
-      
-      
+      };
       
       return(ret);
     }
@@ -1096,7 +1096,7 @@ var rainfallProfiles = [
         name: nitrogen.name,
         totalAvailableNitrogen: [],
         aIndex: []
-      }
+      };
 
       var sum = 0;
       for (var j=0; j<2+fertilisersAdded.length; j++) {
@@ -1126,7 +1126,7 @@ var rainfallProfiles = [
           potentialYield: currentPotentialYield * 1000,
           Navail: TON.totalAvailableNitrogen[TON.totalAvailableNitrogen.length-1],
           Nuptake: 0,
-          yield: 0,
+          actualYield: 0,
           proteinYield: 0,
           percentProtein: 0,
           percentOil: null
@@ -1142,19 +1142,19 @@ var rainfallProfiles = [
            potentialYield: currentPotentialYield * 1000,
            Navail: TON.totalAvailableNitrogen[TON.totalAvailableNitrogen.length-1],
            Nuptake: 0,
-           yield: 0,
+           actualYield: 0,
            proteinYield: 0,
            percentProtein: 0,
            percentOil: 0
         },
         {
           name: "barley",
-          yield: 0,
+          actualYield: 0,
           percentProtein: 0
         },
         {
           name: "oats",
-          yield: 0,
+          actualYield: 0,
           percentProtein: 0
         }
       ];
@@ -1166,7 +1166,7 @@ var rainfallProfiles = [
         ret[i].Nuptake = ret[i].z * ret[i].potentialYield *
           tanh(ret[i].Navail / ret[i].z / ret[i].potentialYield);
 
-        ret[i].yield = ret[i].potentialYield *
+        ret[i].actualYield = ret[i].potentialYield *
           (2 * ret[i].Nuptake / ret[i].g / ret[i].potentialYield -
           Math.pow(ret[i].Nuptake / ret[i].g / ret[i].potentialYield, 2));
 
@@ -1175,12 +1175,12 @@ var rainfallProfiles = [
           (ret[i].Knhi * ret[i].potentialYield + ret[i].Nuptake);
 
 
-        ret[i].percentProtein = ret[i].proteinYield / ret[i].yield * 100;
+        ret[i].percentProtein = ret[i].proteinYield / ret[i].actualYield * 100;
       }
 
       ret[1].percentOil = ret[1].rubbishCanola - ret[1].percentProtein;
 
-      ret[2].yield = ret[0].yield;
+      ret[2].actualYield = ret[0].actualYield;
       if (ret[0].percentProtein < 6) ret[2].percentProtein = ret[0].percentProtein;
       else if (ret[0].percentProtein < 10) ret[2].percentProtein = ret[0].percentProtein +
         (ret[0].percentProtein - 6) * 0.4;
@@ -1188,11 +1188,46 @@ var rainfallProfiles = [
         (10 - 6) * 0.4 + (ret[0].percentProtein - 10) * 0.6;
       else ret[2].percentProtein = ret[0].percentProtein;
 
-      ret[3].yield = ret[0].yield;
+      ret[3].actualYield = ret[0].actualYield;
       ret[3].percentProtein = ret[0].percentProtein * (6.25/5.7);
 
       return(ret);
     }
+    
+    function protein_oil_yield_wheat(currentPotentialYield, TON, wheatParameters) {
+    // Calculates the yield, protein yield and percent protein for wheat with given inputs
+    
+      var parameters = wheatParameters[0];
+     // console.log(JSON.stringify(parameters));
+    
+      var ret = { 
+          Nuptake: 0,
+          actualYield: 0, 
+          proteinYield: 0, 
+          percentProtein: 0 
+      };
+      
+      var potentialYield = currentPotentialYield * 1000;
+      var Navail = TON[TON.length-1].totalAvailableNitrogen;
+      
+      ret.Nuptake = parameters.z * potentialYield * tanh(Navail / (parameters.z * potentialYield));
+      
+      ret.actualYield = potentialYield *
+          (2 * ret.Nuptake / parameters.g / potentialYield -
+          Math.pow(ret.Nuptake / parameters.g / potentialYield, 2));
+          
+      ret.proteinYield = parameters.magicProteinYield * ret.Nuptake *
+          parameters.NHI * potentialYield * parameters.Knhi /
+          (parameters.Knhi * potentialYield + ret.Nuptake);
+
+
+      ret.percentProtein = ret.proteinYield / ret.actualYield * 100;
+      
+     // console.log(JSON.stringify(ret));
+
+      return(ret);
+    }
+    
 
     function protein_premium(currentCrop, currentPotentialYield, percentProtein, cropData) {
     // Calculates the protein premium/discount
@@ -1241,7 +1276,7 @@ var rainfallProfiles = [
       var ronCarried = calculateRON(paddockHistory);
 
       return simpleSYN(currentCrop, currentPotentialYield, currentCropBasePrice,
-      soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, RONcarried, fertiliserData, cropData);
+      soil, soilOrganicCarbon, weeklyRain, fertilisersAdded, ronCarried, fertiliserData, cropData);
       }
 
 
@@ -1274,14 +1309,14 @@ var rainfallProfiles = [
       }
       var thisProteinOilYield = proteinOilYield[j];
 
-      var actualYield = thisProteinOilYield.yield/1000;
+      var actualYield = thisProteinOilYield.actualYield/1000;
       var percentProtein = thisProteinOilYield.percentProtein;
 
       var price = protein_premium(currentCrop, currentPotentialYield, percentProtein, cropData);
 
       var grossReturn = 0;
       if (cropType == "canola"){
-        if (price == 0) grossReturn = actualYield * currentCropBasePrice;
+        if (price === 0) grossReturn = actualYield * currentCropBasePrice;
         else grossReturn = actualYield * currentCropBasePrice * price;
       }
       else grossReturn = actualYield * (currentCropBasePrice + price);
@@ -1302,4 +1337,31 @@ var rainfallProfiles = [
       }
       
       
+      
+   function sensitivitySYN(currentCrop, currentPotentialYield, currentCropBasePrice,
+      TON, fertilisersAdded, fertiliserData, cropData, parameters){
+      
+      // Run a SYN scenario with given TON
+      //console.log(JSON.stringify(TON));
+
+      var proteinOilYield = protein_oil_yield_wheat(currentPotentialYield, TON, parameters);
+
+      var actualYield = proteinOilYield.actualYield/1000;
+      var percentProtein = proteinOilYield.percentProtein;
+
+      var price = protein_premium(currentCrop, currentPotentialYield, percentProtein, cropData);
+
+      var grossReturn = actualYield * (currentCropBasePrice + price);
+      
+      var costs = 0;
+      for (var i=0; i<fertilisersAdded.length; i++) 
+        costs += fertilisersAdded[i].cost * fertilisersAdded[i].netRate;
+
+      var netReturn = grossReturn - costs;
+      
+      return({actualYield: round2(actualYield),
+              percentProtein: round1(percentProtein),
+              price: round2(currentCropBasePrice + price),
+              netReturn: Math.round(netReturn)}); 
+      }      
  

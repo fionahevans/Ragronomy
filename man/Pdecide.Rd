@@ -4,8 +4,8 @@
 \alias{Pdecide}
 \title{Pdecide}
 \usage{
-Pdecide(Nrate, Prate, Ypot, CstP = 0.12, CfertP = 0.06, Pst = 20,
-  Area = NULL, P_y = NULL, P_pfert = NULL)
+Pdecide(Prate, Ypot, CstP = 0.12, CfertP = 0.06, Pst = 20, Area = NULL,
+  P_y = NULL, P_pfert = NULL)
 }
 \arguments{
 \item{Prate}{P rate (kg/ha)}
@@ -50,7 +50,7 @@ The model is also used in an online tool: http://optimiser.csiro.au/
 Prate <- seq(from=0, to=30, by=2) 
 Pyield <- rep(NA, length(Prate))
 for (i in 1:length(Prate)) {
-  Pyield[i] <- NPdecide(500, Prate[i], Ypot=3000)$yield
+  Pyield[i] <- Pdecide(500, Prate[i], Ypot=3000)$yield
 }
 
 plot(Prate, Pyield, type="b", main="Yield response to P (N non-limiting)", xlab="Yield (kg/ha)") 
