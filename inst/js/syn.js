@@ -348,7 +348,7 @@ var rainfallProfiles = [
       var NC_LUPINS_NB = 0.0275;
       var NC_LUPINS_NS = 0.05;
 
-      var RONproduced = paddockHistory[i].actualYield * 1000 * (NC_LUPINS_NB / hi - NC_LUPINS_NS);
+      var RONproduced = paddockHistory[i].yield * 1000 * (NC_LUPINS_NB / hi - NC_LUPINS_NS);
 
       return(RONproduced);
     }
@@ -360,7 +360,7 @@ var rainfallProfiles = [
       var N_NONLEGUME = 1.4/100;
 
       var RONproduced = 0;
-      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].actualYield*1000)*
+      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].yield*1000)*
         (N_LEGUME*paddockHistory[i].legumeContent/100 + N_NONLEGUME*(1-paddockHistory[i].legumeContent/100));
 
      return(RONproduced);
@@ -376,7 +376,7 @@ var rainfallProfiles = [
       var N_NONLEGUME = 1.4/100;
 
       var RONproduced = 0;
-      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].actualYield*1000)*
+      if (paddockHistory[i].legumeContent > 0) RONproduced = 2/3*(paddockHistory[i].yield*1000)*
         (N_LEGUME*paddockHistory[i].legumeContent/100 + 
         N_NONLEGUME*(1-paddockHistory[i].legumeContent/100));
 

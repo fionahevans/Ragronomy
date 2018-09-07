@@ -204,6 +204,20 @@ addFertilisers <- function(fertilisersAdded, fertiliserData) {
 #' 
 #' @param paddockHistory   data frame containing paddock history.
 #' 
+#' @examples 
+#' paddockHistory = data.frame(matrix(0, nrow=4, ncol=7, dimnames = list(c(1:4),
+#' c("year", "cropPasture", 
+#'   "basePrice", "yield", "legumeContent", "harvestIndex", "till" ))))
+#' 
+#' paddockHistory$year=c(2003, 2002, 2001, 2000)
+#' paddockHistory$cropPasture = c("legume crop", "non-legume crop", "non-legume crop", "non-legume crop")
+#' paddockHistory$basePrice=c(NA, rep(202,3)) 
+#' paddockHistory$yield = rep(2, 4)
+#' paddockHistory$legumeContent=NA
+#' paddockHistory$harvestIndex=rep(hi, 4)
+#' paddockHistory$till=rep(till,4)
+#' 
+#' calculateRON(paddockHistory)
 #' @export
 calculateRON <- function(paddockHistory) {
   require(V8)
